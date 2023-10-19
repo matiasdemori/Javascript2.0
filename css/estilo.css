@@ -31,7 +31,7 @@ body {
     padding: 10px;
     border: 1px solid #000;
     text-align: center;
-    max-width: 100px; /* Ancho máximo de la columna */
+    max-width: 100px;
 }
 
 .columna h2 {
@@ -41,17 +41,17 @@ body {
 
 .puntajes {
     display: flex;
-    flex-direction: column; /* Puntajes uno abajo del otro */
+    flex-direction: column; 
     align-items: center;
-    gap: 10px; /* Espacio entre los puntajes */
+    gap: 10px;
 }
 
 .puntaje {
-    width: 100px; /* Tamaño de 100px */
-    height: 75px; /* Tamaño de 100px */
+    width: 100px; 
+    height: 75px; 
     background-color: lightblue;
     border: 1px solid #000;
     text-align: center;
-    line-height: 100px; /* Centra el contenido verticalmente */
+    line-height: 100px;
     margin-top: 5px;
 }
