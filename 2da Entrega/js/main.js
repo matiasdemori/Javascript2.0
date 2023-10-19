@@ -115,4 +115,5 @@ function jugarParaUnJugador() {
     alert(`¡Gracias por jugar, ${jugador}! Tu puntaje final es de ${puntaje} puntos.`);
 }
 
-jugarParaUnJugador();
+window.onload = jugarParaUnJugador
+
