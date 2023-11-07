@@ -1,55 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/estilo.css">
-    <title>Document</title>
+    <title>Juego de Preguntas</title>
 </head>
 
 <body>
+    <div>
+        <div>
+            <button id="boton">Jugamos?</button>
+        </div>
+        <div>
+            <p>Mejor puntaje</p>
+            <p id="mejorPuntaje">0</p>
+        </div>
+    </div>
 
     <div class="contenedor">
-        <h1 class="titulo">Jugamos?</h1>
+        <h1 class="titulo">Juego de preguntas y respuestas</h1>
         <div class="tabla">
-            <div class="columna">
+            <div class="columna" id="historia">
                 <h2>Historia</h2>
-                <div class="puntaje">20</div>
-                <div class="puntaje">40</div>
-                <div class="puntaje">60</div>
-                <div class="puntaje">80</div>
-                <div class="puntaje">100</div>
+                <div class="puntaje" data-tema="Historia" data-puntos="20">20</div>
+                <div class="puntaje" data-tema="Historia" data-puntos="40">40</div>
+                <div class="puntaje" data-tema="Historia" data-puntos="60">60</div>
+                <div class="puntaje" data-tema="Historia" data-puntos="80">80</div>
+                <div class="puntaje" data-tema="Historia" data-puntos="100">100</div>
             </div>
 
-            <div class="columna">
+            <div class="columna" id="ciencia">
                 <h2>Ciencia</h2>
-                <div class="puntaje">20</div>
-                <div class="puntaje">40</div>
-                <div class="puntaje">60</div>
-                <div class="puntaje">80</div>
-                <div class="puntaje">100</div>
+                <div class="puntaje" data-tema="Ciencia" data-puntos="20">20</div>
+                <div class="puntaje" data-tema="Ciencia" data-puntos="40">40</div>
+                <div class="puntaje" data-tema="Ciencia" data-puntos="60">60</div>
+                <div class="puntaje" data-tema="Ciencia" data-puntos="80">80</div>
+                <div class="puntaje" data-tema="Ciencia" data-puntos="100">100</div>
             </div>
 
-            <div class="columna">
-                <h2>Geografia</h2>
-                <div class="puntaje">20</div>
-                <div class="puntaje">40</div>
-                <div class="puntaje">60</div>
-                <div class="puntaje">80</div>
-                <div class="puntaje">100</div>
+            <div class="columna" id="Matemáticas">
+                <h2>Matemáticas</h2>
+                <div class="puntaje" data-tema="Matemáticas" data-puntos="20">20</div>
+                <div class="puntaje" data-tema="Matemáticas" data-puntos="40">40</div>
+                <div class="puntaje" data-tema="Matemáticas" data-puntos="60">60</div>
+                <div class="puntaje" data-tema="Matemáticas" data-puntos="80">80</div>
+                <div class="puntaje" data-tema="Matemáticas" data-puntos="100">100</div>
             </div>
 
-            <div class="columna">
+            <div class="columna" id="deportes">
                 <h2>Deportes</h2>
-                <div class="puntaje">20</div>
-                <div class="puntaje">40</div>
-                <div class="puntaje">60</div>
-                <div class="puntaje">80</div>
-                <div class="puntaje">100</div>
+                <div class="puntaje" data-tema="Deportes" data-puntos="20">20</div>
+                <div class="puntaje" data-tema="Deportes" data-puntos="40">40</div>
+                <div class="puntaje" data-tema="Deportes" data-puntos="60">60</div>
+                <div class="puntaje" data-tema="Deportes" data-puntos="80">80</div>
+                <div class="puntaje" data-tema="Deportes" data-puntos="100">100</div>
             </div>
         </div>
-        <script src="./js/main.js"></script>
-</body>
+    </div>
 
+    <script src="./js/main.js"></script>
+</body>
 </html>
