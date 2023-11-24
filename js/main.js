@@ -1,50 +1,34 @@
-const temas = [
-    {
-        nombre: "Historia",
-        preguntas: [
-            { id: 1, pregunta: "¿Quién fue el primer presidente de los Estados Unidos?", puntaje: 20, respuesta: "George Washington" },
-            { id: 2, pregunta: "¿En qué año se firmó la Declaración de Independencia de los Estados Unidos?", puntaje: 40, respuesta: "1776" },
-            { id: 3, pregunta: "¿Cuál fue la dinastía que gobernó Rusia desde el siglo XVII hasta principios del siglo XX?", puntaje: 60, respuesta: "Romanov" },
-            { id: 4, pregunta: "¿Quién fue el líder de la Revolución Cubana?", puntaje: 80, respuesta: "Fidel Castro" },
-            { id: 5, pregunta: "¿Qué evento marcó el inicio de la Primera Guerra Mundial?", puntaje: 100, respuesta: "Asesinato de Francisco Fernando" }
-        ]
-    },
-    {
-        nombre: "Ciencia",
-        preguntas: [
-            { id: 6, pregunta: "¿Cuál es la fórmula química del agua?", puntaje: 20, respuesta: "H2O" },
-            { id: 7, pregunta: "¿Quién propuso la teoría de la relatividad?", puntaje: 40, respuesta: "Albert Einstein" },
-            { id: 8, pregunta: "¿Cuál es el planeta más grande del sistema solar?", puntaje: 60, respuesta: "Júpiter" },
-            { id: 9, pregunta: "¿Qué gas compone la mayor parte de la atmósfera terrestre?", puntaje: 80, respuesta: "Nitrógeno" },
-            { id: 10, pregunta: "¿Qué científico descubrió la estructura del ADN?", puntaje: 100, respuesta: "James Watson y Francis Crick" }
-        ]
-    },
-    {
-        nombre: "Matemáticas",
-        preguntas: [
-            { id: 11, pregunta: "¿Cuál es el teorema de Pitágoras?", puntaje: 20, respuesta: "a² + b² = c²" },
-            { id: 12, pregunta: "¿Cuál es el logaritmo natural de 1?", puntaje: 40, respuesta: "0" },
-            { id: 13, pregunta: "¿Cuál es el valor de la constante de Euler (e)?", puntaje: 60, respuesta: "2.71828" },
-            { id: 14, pregunta: "¿Cuál es el quinto número primo?", puntaje: 80, respuesta: "11" },
-            { id: 15, pregunta: "¿Cuál es el volumen de una esfera con radio r?", puntaje: 100, respuesta: "(4/3)πr³" }
-        ]
-    },
-    {
-        nombre: "Deportes",
-        preguntas: [
-            { id: 16, pregunta: "¿En qué deporte se utiliza una raqueta para golpear una pelota?", puntaje: 20, respuesta: "Tenis" },
-            { id: 17, pregunta: "¿Cuál es el deporte más popular en Brasil?", puntaje: 40, respuesta: "Fútbol" },
-            { id: 18, pregunta: "¿Cuál es el evento deportivo conocido como 'la carrera más grande del mundo'?", puntaje: 60, respuesta: "Tour de Francia" },
-            { id: 19, pregunta: "¿En qué deporte se anota un touchdown?", puntaje: 80, respuesta: "Fútbol americano" },
-            { id: 20, pregunta: "¿Cuál es el equipo de fútbol con más Copas del Mundo ganadas?", puntaje: 100, respuesta: "Brasil" }
-        ]
+// En un principio declaro la ruta del archivo JSON local que se va a solicitar. Luego inicializo una variable temas como un array vacío. Esta variable se usará para almacenar los datos obtenidos del archivo JSON después de la solicitud fetch. Realizo una solicitud utilizando fetch a la URL especificada. Encadeno un then para manejar la respuesta de la solicitud fetch. Si la respuesta no es exitosa (!response.ok), se lanza un error.  Convierto la respuesta de la solicitud en un objeto. Este método retorna una promesa que resuelve con los datos del archivo JSON. Encadeno otro then que recibe los datos del archivo JSON. Estos datos se asignan a la variable temas. Por ultimo con el catch si hay un error en la solicitud, se mostrará un mensaje de error en la consola.
+
+const urlArchivoJSON = './js/preguntas.json';
+let temas = [];
+
+fetch(urlArchivoJSON)
+  .then(response => {
+    
+    if (!response.ok) {
+      throw new Error('Error al obtener los datos');
     }
-];
+
+    return response.json();
+  })
+  .then(data => {
+
+    temas = data;
+   
+  })
+  .catch(error => {
+    console.error('Error de fetch:', error);
+  });
+
+// Se declaran varias variables globales (jugador, puntaje, preguntasRestantes y juegoIniciado) que se utilizan para mantener el estado del juego, el puntaje del jugador, el número de preguntas restantes y si el juego ha iniciado o no.
 
 let jugador;
 let puntaje = 0;
 let preguntasRestantes = 0;
 let juegoIniciado = false;
+
+// Establezco un evento que controla el comportamiento del botón cuando se hace clic, iniciando o reiniciando el juego según el estado actual del juego, posterior a ello llamo a la función actualizar el mejor puntaje al cargar la página.
 
 document.addEventListener('DOMContentLoaded', function () {
     const boton = document.getElementById('boton');
@@ -59,24 +43,36 @@ document.addEventListener('DOMContentLoaded', function () {
     actualizarMejorPuntaje();
 });
 
+// Con laa función iniciarJuego preparo el juego para iniciar solicitando el nombre del jugador, inicializo las variables, marco todas las preguntas como no realizadas, habilito la interacción con los puntajes y comienza la secuencia de preguntas del juego.
+
 function iniciarJuego() {
-    jugador = prompt("Por favor, ingresa tu nombre:");
-    actualizarMejorPuntaje();
-
-    habilitarPuntajes();
-
-    for (const tema of temas) {
-        for (const pregunta of tema.preguntas) {
-            pregunta.realizada = false;
-        }
-    }
-
-    preguntasRestantes = 20;
-    puntaje = 0;
-    juegoIniciado = true;
-
-    jugarSiguientePregunta();
+    Swal.fire({
+        title: 'Ingresa tu nombre:',
+        input: 'text',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        showCancelButton: false,
+        confirmButtonText: 'Confirmar',
+        showLoaderOnConfirm: true,
+        preConfirm: (nombre) => {
+            jugador = nombre;
+            actualizarMejorPuntaje();
+            preguntasRestantes = 20;
+            puntaje = 0;
+            juegoIniciado = true;
+            habilitarPuntajes();
+            jugarSiguientePregunta();
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    });
 }
+
+// Con la funcion habilitarPuntajes recorro todos los elementos que contiene la clase puntaje, extrae los atributos data-tema y data-puntos y los almaceno en las variables tema y puntos, respectivamente, para cada uno de estos elementos.
+
+// Posterior a ello busco el objeto de tema correspondiente al tema del puntaje y luego busco la pregunta dentro de ese tema que tenga el mismo puntaje que el valor almacenado en la variable puntos. Esto permite identificar la pregunta asociada al puntaje dentro del tema correcto en la estructura de datos del juego.
+
+// Por ultimo esta la sección de código que gestiona la representación visual y la interactividad de los elementos de puntaje en función de si la pregunta asociada a ese puntaje ya ha sido respondida o no.
 
 function habilitarPuntajes() {
     const puntajes = document.querySelectorAll('.puntaje');
@@ -97,13 +93,24 @@ function habilitarPuntajes() {
     });
 }
 
+// Con la función actualizarMejorPuntaje actualizo el contenido de un elemento HTML con ID 'mejorPuntaje' en la página web, utilizando el valor almacenado bajo la clave 'mejorPuntaje' en el localStorage si ese valor existe.
+
 function actualizarMejorPuntaje() {
     const mejorPuntajeElement = document.getElementById('mejorPuntaje');
-    const mejorPuntajeGuardado = localStorage.getItem('mejorPuntaje');
-    if (mejorPuntajeGuardado) {
-        mejorPuntajeElement.textContent = mejorPuntajeGuardado;
+    const mejorJugadorElement = document.getElementById('mejorJugador');
+    const puntajeMaximoGuardado = JSON.parse(localStorage.getItem('puntajeMaximo'));
+
+    if (puntajeMaximoGuardado) {
+        mejorPuntajeElement.textContent = puntajeMaximoGuardado.puntaje;
+        mejorJugadorElement.textContent = puntajeMaximoGuardado.nombre;
     }
 }
+
+// Al comienzo con la funcion verifico si el juego está iniciado, luego busco la pregunta correspondiente al tema y puntaje proporcionados, y si esa pregunta es válida y aún no ha sido respondida, la marco como realizada y disminuyo el contador de preguntas restantes en el juego.
+
+// La segunda parte de la funcion actualiza la interfaz gráfica para reflejar visualmente que se ha seleccionado un puntaje determinado.A continuacion solicita al jugador que responda a la pregunta asociada a ese puntaje, verificando si la respuesta es correcta para incrementar el puntaje del jugador.
+
+// Por ultimo permite al jugador decidir si desea continuar jugando después de responder una pregunta. Si quedan preguntas restantes y el jugador elige continuar, se presentará la siguiente pregunta. Si no quedan más preguntas o el jugador decide no continuar, el juego terminará y se mostrarán los resultados finales.
 
 function elegirPregunta(temaNombre, puntos) {
     if (!juegoIniciado) {
@@ -114,52 +121,105 @@ function elegirPregunta(temaNombre, puntos) {
     const pregunta = tema.preguntas.find(p => p.puntaje === puntos);
 
     if (!pregunta || pregunta.realizada) {
-        alert("Pregunta no válida o ya realizada. Elije otra.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Pregunta no válida o ya realizada. Elije otra.',
+            showConfirmButton: false,
+            timer: 1500
+        });
         return;
     }
 
     pregunta.realizada = true;
     preguntasRestantes--;
 
-    const puntajeElement = document.querySelector(`#${temaNombre.toLowerCase()} .puntaje[data-puntos="${puntos}"]`);
-    puntajeElement.innerHTML = '&#10006';
-    puntajeElement.classList.add('cruz');
+    Swal.fire({
+        title: `${jugador}, elige la pregunta por ${puntos} puntos:`,
+        text: pregunta.pregunta,
+        input: 'text',
+        showCancelButton: true,
+        confirmButtonText: 'Responder',
+        cancelButtonText: 'Cancelar',
+        showLoaderOnConfirm: true,
+        preConfirm: (respuesta) => {
+            if (respuesta && respuesta.toLowerCase() === pregunta.respuesta.toLowerCase()) {
+                puntaje += puntos;
+                const puntajeElement = document.querySelector(`#${temaNombre.toLowerCase()} .puntaje[data-puntos="${puntos}"]`);
+                puntajeElement.innerHTML = '&#10004';
+                Swal.fire({
+                    icon: 'success',
+                    title: `¡Respuesta correcta! Ahora tienes ${puntaje} puntos.`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                const puntajeElement = document.querySelector(`#${temaNombre.toLowerCase()} .puntaje[data-puntos="${puntos}"]`);
+                puntajeElement.innerHTML = '&#10006';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Respuesta incorrecta. No ganas puntos.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
 
-    const respuesta = prompt(`${jugador}, elige la pregunta por ${puntos} puntos:\n${pregunta.pregunta}`);
-
-    if (respuesta && respuesta.toLowerCase() === pregunta.respuesta.toLowerCase()) {
-        puntaje += puntos;
-        alert(`¡Respuesta correcta! Ahora tienes ${puntaje} puntos.`);
-    } else {
-        alert("Respuesta incorrecta. No ganas puntos.");
-    }
-
-    if (preguntasRestantes > 0) {
-        const continuar = confirm("¿Quieres seguir jugando?");
-        if (continuar) {
-            jugarSiguientePregunta();
-        } else {
-            terminarJuego();
-        }
-    } else {
-        terminarJuego();
-    }
+            if (preguntasRestantes > 0) {
+                setTimeout(() => {
+                    Swal.fire({
+                        title: '¿Quieres seguir jugando?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí',
+                        cancelButtonText: 'No'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            jugarSiguientePregunta();
+                        } else {
+                            terminarJuego();
+                        }
+                    });
+                }, 1500);
+            } else {
+                setTimeout(() => {
+                    terminarJuego();
+                }, 1500);
+            }
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    });
 }
+
+// Esta función proporciona una notificación al jugador para indicar que puede seleccionar una pregunta por temática y puntaje cuando el juego está en curso.
 
 function jugarSiguientePregunta() {
     if (juegoIniciado) {
-        alert(`Elige una pregunta por temática y puntaje.`);
+        Swal.fire({
+            title: 'Elige una pregunta por temática y puntaje.',
+            icon: 'info',
+            confirmButtonText: 'OK'
+        });
     }
 }
+
+// Esta función se encarga de finalizar el juego, primero chequea que el juego este iniciado, y de estar iniciado lo coloca en false. Posterior a eso chequea el puntaje maximo y de haber sido superado guarda el puntaje más alto, actualizar la interfaz gráfica con el mejor puntaje y reiniciar las preguntas para un próximo juego.
 
 function terminarJuego() {
     if (juegoIniciado) {
         juegoIniciado = false;
-        alert(`¡Gracias por jugar, ${jugador}! Tu puntaje final es de ${puntaje} puntos.`);
+        Swal.fire({
+            title: `¡Gracias por jugar, ${jugador}! Tu puntaje final es de ${puntaje} puntos.`,
+            icon: 'info',
+            confirmButtonText: 'OK'
+        });
 
-        const mejorPuntajeGuardado = localStorage.getItem('mejorPuntaje');
-        if (!mejorPuntajeGuardado || puntaje > parseInt(mejorPuntajeGuardado)) {
-            localStorage.setItem('mejorPuntaje', puntaje);
+        const puntajeJugador = {
+            nombre: jugador,
+            puntaje: puntaje
+        };
+
+        const puntajeMaximoGuardado = JSON.parse(localStorage.getItem('puntajeMaximo'));
+        if (!puntajeMaximoGuardado || puntaje > puntajeMaximoGuardado.puntaje) {
+            localStorage.setItem('puntajeMaximo', JSON.stringify(puntajeJugador));
         }
 
         actualizarMejorPuntaje();
@@ -178,10 +238,18 @@ function terminarJuego() {
     }
 }
 
-function reiniciarJuego() {
-    const reiniciar = confirm("¿Deseas reiniciar el juego?");
-    if (reicniar) {
-        iniciarJuego();
-    }
-}
+// Esta función solicita confirmación al jugador para reiniciar el juego y, si se confirma, llama a la función iniciarJuego() para comenzar nuevamente el juego desde el principio.
 
+function reiniciarJuego() {
+    Swal.fire({
+        title: '¿Deseas reiniciar el juego?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            iniciarJuego();
+        }
+    });
+}
